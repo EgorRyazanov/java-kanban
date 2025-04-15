@@ -71,10 +71,7 @@ public class Main {
         String title = scanner.next();
         System.out.println("Введите описание задачи: ");
         String description = scanner.next();
-        int id = manager.generateId();
-        Task task = new Task(title, description, id, TaskStatus.NEW);
-        manager.addTask(task);
-        System.out.println("Задача создана с ID: " + id);
+        manager.addTask(title, description, TaskStatus.NEW);
     }
 
     private static void createEpic() {
@@ -82,10 +79,7 @@ public class Main {
         String title = scanner.next();
         System.out.println("Введите описание эпика: ");
         String description = scanner.next();
-        int id = manager.generateId();
-        Epic epic = new Epic(title, description, id);
-        manager.addEpic(epic);
-        System.out.println("Эпик создан с ID: " + id);
+        manager.addEpic(title, description);
     }
 
     private static void createSubtask() {
@@ -100,10 +94,7 @@ public class Main {
         String title = scanner.next();
         System.out.println("Введите описание подзадачи: ");
         String description = scanner.next();
-        int id = manager.generateId();
-        Subtask subtask = new Subtask(title, description, id, TaskStatus.NEW, epicId);
-        manager.addSubtask(subtask);
-        System.out.println("Подзадача создана с ID: " + id);
+        manager.addSubtask(title, description, TaskStatus.NEW, epicId);
     }
 
     private static void listAllTasks() {
