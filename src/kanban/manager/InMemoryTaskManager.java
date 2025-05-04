@@ -1,7 +1,13 @@
-package kanban;
+package kanban.manager;
+
+import kanban.model.Epic;
+import kanban.model.Subtask;
+import kanban.model.Task;
+import kanban.model.TaskStatus;
 
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
     private int idCounter = 1;
@@ -11,7 +17,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     private final HistoryManager historyManager;
 
-    InMemoryTaskManager(HistoryManager historyManager) {
+    public InMemoryTaskManager(HistoryManager historyManager) {
         this.historyManager = historyManager;
     }
 
@@ -155,6 +161,11 @@ public class InMemoryTaskManager implements TaskManager {
             }
         }
         subtasks.remove(id);
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
     }
 
     private void updateEpicStatus(Epic epic) {
