@@ -1,5 +1,9 @@
-package kanban;
+package kanban.manager;
 
+import kanban.model.Epic;
+import kanban.model.Subtask;
+import kanban.model.Task;
+import kanban.model.TaskStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.List;

@@ -1,10 +1,14 @@
-package kanban;
+package kanban.manager;
 
-import java.util.ArrayList;
+import kanban.model.Epic;
+import kanban.model.Subtask;
+import kanban.model.Task;
+import kanban.model.TaskStatus;
+
 import java.util.List;
 
 public interface TaskManager {
-    ArrayList<Task> getAllTasks();
+    List<Task> getAllTasks();
 
     void deleteAllTasks();
 
@@ -18,7 +22,7 @@ public interface TaskManager {
 
     void removeTask(int id);
 
-    ArrayList<Epic> getAllEpics();
+    List<Epic> getAllEpics();
 
     void deleteAllEpics();
 
@@ -30,13 +34,15 @@ public interface TaskManager {
 
     void removeEpic(int id);
 
-    ArrayList<Subtask> getAllSubtasks();
+    List<Subtask> getAllSubtasks();
 
-    ArrayList<Subtask> getSubtasksByEpic(int epicId);
+    List<Subtask> getSubtasksByEpic(int epicId);
 
     void addSubtask(String title, String description, TaskStatus status, int epicId);
 
     void updateSubtask(Subtask subtask);
 
     void removeSubtask(int id);
+
+    List<Task> getHistory();
 }
