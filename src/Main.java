@@ -1,14 +1,16 @@
-import kanban.*;
+import kanban.manager.TaskManager;
+import kanban.model.Epic;
+import kanban.model.Subtask;
+import kanban.model.Task;
+import kanban.model.TaskStatus;
+import kanban.util.Managers;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
-    private static final Managers managers = new Managers();
-    private static final TaskManager taskManager = managers.getDefault();
-    private static final HistoryManager historyManager = managers.getDefaultHistory();
+    private static final TaskManager taskManager = Managers.getDefault();
 
     public static void main(String[] args) {
         while (true) {
@@ -161,7 +163,7 @@ public class Main {
     private static void listSubtasksByEpic() {
         System.out.println("Введите ID эпика: ");
         int epicId = scanner.nextInt();
-        ArrayList<Subtask> subtasks = taskManager.getSubtasksByEpic(epicId);
+        List<Subtask> subtasks = taskManager.getSubtasksByEpic(epicId);
         if (subtasks.isEmpty()) {
             System.out.println("Нет подзадач для этого эпика.");
         } else {
@@ -214,7 +216,7 @@ public class Main {
 
     private static void getHistory() {
         System.out.println("Задачи:");
-        List<Task> tasks =  historyManager.getHistory();
+        List<Task> tasks =  taskManager.getHistory();
         for (Task task : tasks) {
             System.out.println(task);
         }

@@ -1,10 +1,12 @@
-package kanban;
+package kanban.manager;
+
+import kanban.model.Task;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryManager {
-    private final ArrayList<Task> history = new ArrayList<>(10);
+    private final List<Task> history = new ArrayList<>(10);
 
     public void add(Task task) {
         System.out.println(history.size());

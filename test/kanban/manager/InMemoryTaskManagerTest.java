@@ -1,5 +1,9 @@
-package kanban;
+package kanban.manager;
 
+import kanban.model.Epic;
+import kanban.model.Subtask;
+import kanban.model.Task;
+import kanban.model.TaskStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.List;
@@ -21,7 +25,7 @@ class InMemoryTaskManagerTest {
 
         Task createdTask = manager.getTask(1);
         assertNotNull(createdTask, "Задача должна существовать после создания");
-        assertEquals("Task 1", createdTask.title);
+        assertEquals("Task 1", createdTask.getTitle());
         assertEquals(TaskStatus.NEW, createdTask.getStatus());
     }
 
@@ -118,7 +122,7 @@ class InMemoryTaskManagerTest {
         Epic epic = manager.getEpic(1);
 
         assertNotNull(epic, "Эпик должен существовать после создания");
-        assertEquals("Epic 1", epic.title);
+        assertEquals("Epic 1", epic.getTitle());
         assertEquals(TaskStatus.NEW, epic.getStatus());
         assertTrue(epic.getSubtaskIds().isEmpty(), "Список подзадач должен быть пустым");
     }
@@ -162,8 +166,8 @@ class InMemoryTaskManagerTest {
         manager.updateEpic(updated);
         Epic result = manager.getEpic(1);
 
-        assertEquals("Updated", result.title);
-        assertEquals("New Desc", result.description);
+        assertEquals("Updated", result.getTitle());
+        assertEquals("New Desc", result.getDescription());
     }
 
     @Test
@@ -268,7 +272,7 @@ class InMemoryTaskManagerTest {
         manager.updateSubtask(updated);
         Subtask result = manager.getSubtask(2);
 
-        assertEquals("Updated", result.title);
+        assertEquals("Updated", result.getTitle());
         assertEquals(TaskStatus.DONE, result.getStatus());
         assertEquals(1, result.getEpicId());
     }
