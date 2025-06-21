@@ -5,15 +5,16 @@ import kanban.model.Subtask;
 import kanban.model.Task;
 import kanban.model.TaskStatus;
 
-import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
     private int idCounter = 1;
-    private final HashMap<Integer, Task> tasks = new HashMap<>();
-    private final HashMap<Integer, Epic> epics = new HashMap<>();
-    private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    private final Map<Integer, Task> tasks = new HashMap<>();
+    private final Map<Integer, Epic> epics = new HashMap<>();
+    private final Map<Integer, Subtask> subtasks = new HashMap<>();
 
     private final HistoryManager historyManager;
 
@@ -22,7 +23,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Task> getAllTasks() {
+    public List<Task> getAllTasks() {
         return new ArrayList<>(tasks.values());
     }
 
@@ -64,7 +65,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Epic> getAllEpics() {
+    public List<Epic> getAllEpics() {
         return new ArrayList<>(epics.values());
     }
 
@@ -112,14 +113,14 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Subtask> getAllSubtasks() {
+    public List<Subtask> getAllSubtasks() {
         return new ArrayList<>(subtasks.values());
     }
 
     @Override
-    public ArrayList<Subtask> getSubtasksByEpic(int epicId) {
+    public List<Subtask> getSubtasksByEpic(int epicId) {
         Epic epic = epics.get(epicId);
-        ArrayList<Subtask> result = new ArrayList<>();
+        List<Subtask> result = new ArrayList<>();
         if (epic != null) {
             for (int id : epic.getSubtaskIds()) {
                 result.add(subtasks.get(id));
@@ -169,7 +170,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     private void updateEpicStatus(Epic epic) {
-        ArrayList<Integer> subtaskIds = epic.getSubtaskIds();
+        List<Integer> subtaskIds = epic.getSubtaskIds();
         if (subtaskIds.isEmpty()) {
             epic.setStatus(TaskStatus.NEW);
             return;
