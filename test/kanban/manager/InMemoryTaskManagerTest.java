@@ -4,6 +4,7 @@ import kanban.model.Epic;
 import kanban.model.Subtask;
 import kanban.model.Task;
 import kanban.model.TaskStatus;
+import kanban.model.HistoryManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.List;
@@ -15,7 +16,7 @@ class InMemoryTaskManagerTest {
 
     @BeforeEach
     void beforeEach() {
-        historyManager = new HistoryManager();
+        historyManager = new InMemoryHistoryManager();
         manager = new InMemoryTaskManager(historyManager);
     }
 

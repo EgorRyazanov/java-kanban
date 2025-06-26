@@ -81,7 +81,7 @@ public class Main {
         System.out.println("10 – Показать подзадачи эпика");
         System.out.println("11 – Обновить статус подзадачи");
         System.out.println("12 – Удалить задачу/эпик/подзадачу по ID");
-        System.out.println("13 - Вывести историю последних 10 просмотров");
+        System.out.println("13 - Вывести историю просмотров");
         System.out.println("0 – Выход");
         System.out.println("Выберите пункт: ");
     }

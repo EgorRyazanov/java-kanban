@@ -1,9 +1,6 @@
 package kanban.manager;
 
-import kanban.model.Epic;
-import kanban.model.Subtask;
-import kanban.model.Task;
-import kanban.model.TaskStatus;
+import kanban.model.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,14 +32,18 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTask(int id) {
         Task task = tasks.get(id);
-        historyManager.add(task);
+        if (task != null) {
+            historyManager.add(task);
+        }
         return task;
     }
 
     @Override
     public Subtask getSubtask(int id) {
         Subtask subtask = subtasks.get(id);
-        historyManager.add(subtask);
+        if (subtask != null) {
+            historyManager.add(subtask);
+        }
         return subtask;
     }
 
@@ -62,6 +63,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void removeTask(int id) {
         tasks.remove(id);
+        historyManager.remove(id);
     }
 
     @Override
@@ -72,8 +74,10 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteAllEpics() {
         for (Epic epic : epics.values()) {
+            historyManager.remove(epic.getId());
             for (int subId : epic.getSubtaskIds()) {
                 subtasks.remove(subId);
+                historyManager.remove(subId);
             }
         }
         epics.clear();
@@ -82,7 +86,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic getEpic(int id) {
         Epic epic = epics.get(id);
-        historyManager.add(epic);
+        if (epic != null) {
+            historyManager.add(epic);
+        }
         return epic;
     }
 
@@ -107,9 +113,11 @@ public class InMemoryTaskManager implements TaskManager {
         if (epic != null) {
             for (int subId : epic.getSubtaskIds()) {
                 subtasks.remove(subId);
+                historyManager.remove(subId);
             }
         }
         epics.remove(id);
+        historyManager.remove(id);
     }
 
     @Override
@@ -162,6 +170,7 @@ public class InMemoryTaskManager implements TaskManager {
             }
         }
         subtasks.remove(id);
+        historyManager.remove(id);
     }
 
     @Override
