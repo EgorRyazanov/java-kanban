@@ -1,5 +1,6 @@
 package kanban.model;
 
+import java.util.Comparator;
 import java.util.Objects;
 
 public class Task {
@@ -7,6 +8,7 @@ public class Task {
     protected String description;
     protected int id;
     protected TaskStatus status;
+    protected TaskType type = TaskType.TASK;
 
     public Task(String title, String description, int id, TaskStatus status) {
         this.title = title;
@@ -35,9 +37,13 @@ public class Task {
         return description;
     }
 
+    public TaskType getType() {
+        return type;
+    }
+
     @Override
     public String toString() {
-        return id + ": " + title + " (" + status + ")";
+        return String.format("%s,%s,%s,%s,%s", id, type, title, status, description);
     }
 
     @Override
@@ -53,3 +59,4 @@ public class Task {
         return  17 + Objects.hashCode(id) + title.hashCode();
     }
 }
+

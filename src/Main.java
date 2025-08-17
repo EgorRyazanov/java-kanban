@@ -5,12 +5,13 @@ import kanban.model.Task;
 import kanban.model.TaskStatus;
 import kanban.util.Managers;
 
+import java.io.File;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
-    private static final TaskManager taskManager = Managers.getDefault();
+    private static final TaskManager taskManager = Managers.getFileBackedTaskManager(new File("src/tasks.csv"));
 
     public static void main(String[] args) {
         while (true) {
