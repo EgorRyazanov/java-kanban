@@ -70,7 +70,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             writer.newLine();
         } catch (IOException exception) {
             throw new ManagerSaveException(exception);
-        };
+        }
     }
 
     private static Task fromString(String value) {
