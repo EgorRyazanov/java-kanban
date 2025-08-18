@@ -23,7 +23,7 @@ class FileBackedTaskManagerTest {
         } catch (IOException exception) {
             exception.printStackTrace();
         };
-        manager = new FileBackedTaskManager(historyManager, tempFile, new ArrayList<>());
+        manager = FileBackedTaskManager.createManager(historyManager, tempFile);
     }
 
     @AfterEach
@@ -84,7 +84,7 @@ class FileBackedTaskManagerTest {
             writer.write(subtask.toString()); writer.newLine();
         }
 
-        FileBackedTaskManager loadedManager = new FileBackedTaskManager(historyManager, tempFile, FileBackedTaskManager.loadFromFile(tempFile));
+        FileBackedTaskManager loadedManager = FileBackedTaskManager.createManager(historyManager, tempFile);
         assertNotNull(loadedManager.getTask(1), "Задача не загрузилась");
         assertNotNull(loadedManager.getEpic(2), "Эпик не загрузился");
         assertNotNull(loadedManager.getSubtask(3), "Подзадача не загрузилась");
