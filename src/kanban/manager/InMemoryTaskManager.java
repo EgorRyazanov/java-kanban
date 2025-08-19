@@ -9,9 +9,9 @@ import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
     private int idCounter = 1;
-    private final Map<Integer, Task> tasks = new HashMap<>();
-    private final Map<Integer, Epic> epics = new HashMap<>();
-    private final Map<Integer, Subtask> subtasks = new HashMap<>();
+    protected final Map<Integer, Task> tasks = new HashMap<>();
+    protected final Map<Integer, Epic> epics = new HashMap<>();
+    protected final Map<Integer, Subtask> subtasks = new HashMap<>();
 
     private final HistoryManager historyManager;
 
@@ -48,11 +48,12 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void addTask(String title, String description, TaskStatus status) {
+    public Task addTask(String title, String description, TaskStatus status) {
         int id = generateId();
         Task task = new Task(title, description, id, status);
         tasks.put(id, task);
         System.out.println("Задача создана с ID: " + id);
+        return task;
     }
 
     @Override
@@ -93,12 +94,14 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void addEpic(String title, String desc) {
+    public Epic addEpic(String title, String desc) {
         int id = generateId();
         Epic epic = new Epic(title, desc, id);
         epics.put(epic.getId(), epic);
         System.out.println("Эпик создан с ID: " + id);
         updateEpicStatus(epic);
+
+        return epic;
     }
 
     @Override
@@ -138,7 +141,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void addSubtask(String title, String description, TaskStatus status, int epicId) {
+    public Subtask addSubtask(String title, String description, TaskStatus status, int epicId) {
         int id = generateId();
         Subtask subtask = new Subtask(title, description, id, status, epicId);
         System.out.println("Подзадача создана с ID: " + id);
@@ -148,6 +151,8 @@ public class InMemoryTaskManager implements TaskManager {
             epic.addSubtask(id);
             updateEpicStatus(epic);
         }
+
+        return subtask;
     }
 
     @Override

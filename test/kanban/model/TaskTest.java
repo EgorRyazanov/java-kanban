@@ -32,9 +32,9 @@ class TaskTest {
     }
 
     @Test
-    void tastToString() {
+    void taskToString() {
         Task task = new Task("Test Task", "Test Description", 123, TaskStatus.DONE);
-        String expected = "123: Test Task (DONE)";
+        String expected = "123,TASK,Test Task,DONE,Test Description";
         assertEquals(expected, task.toString());
     }
 
