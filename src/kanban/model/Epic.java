@@ -36,7 +36,7 @@ public class Epic extends Task {
                 .orElseThrow(() -> new Error("Не нашлась подзадача")));
     }
 
-    public TaskStatus getStatus () {
+    public TaskStatus getStatus() {
         if (subtasks.isEmpty()) {
             return TaskStatus.NEW;
         }
