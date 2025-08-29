@@ -6,8 +6,12 @@ import kanban.model.TaskStatus;
 import kanban.util.Managers;
 
 import java.io.File;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
@@ -58,6 +62,9 @@ public class Main {
                 case "13":
                     getHistory();
                     break;
+                case "14":
+                    getPrioritizedTasks();
+                    break;
                 case "0": {
                     System.out.println("Выход.");
                     return;
@@ -83,6 +90,7 @@ public class Main {
         System.out.println("11 – Обновить статус подзадачи");
         System.out.println("12 – Удалить задачу/эпик/подзадачу по ID");
         System.out.println("13 - Вывести историю просмотров");
+        System.out.println("14 - Вывести список задач в порядке приоритета");
         System.out.println("0 – Выход");
         System.out.println("Выберите пункт: ");
     }
@@ -93,7 +101,16 @@ public class Main {
         String title = scanner.next();
         System.out.println("Введите описание задачи: ");
         String description = scanner.next();
-        taskManager.addTask(title, description, TaskStatus.NEW);
+        System.out.println("Введите дату началы работы над задачей в формате YYYY-MM-DDTHH:mm");
+        LocalDateTime startTime = LocalDateTime.parse(scanner.next(), DateTimeFormatter.ISO_DATE_TIME);
+        System.out.println("Введите время выполнения задачи в минутах");
+        Duration duration = Duration.ofMinutes(scanner.nextInt());
+
+        if (taskManager.checkTimeTaskAvailable(startTime, duration)) {
+            taskManager.addTask(title, description, TaskStatus.NEW, duration, startTime);
+        } else {
+            System.out.println("Не может быть пересекающихся по времени задач");
+        }
     }
 
     private static void getTask() {
@@ -137,7 +154,15 @@ public class Main {
         String title = scanner.next();
         System.out.println("Введите описание подзадачи: ");
         String description = scanner.next();
-        taskManager.addSubtask(title, description, TaskStatus.NEW, epicId);
+        System.out.println("Введите дату началы работы над задачей в формате YYYY-MM-DDTHH:mm");
+        LocalDateTime startTime = LocalDateTime.parse(scanner.next(), DateTimeFormatter.ISO_DATE_TIME);
+        System.out.println("Введите время выполнения задачи в минутах");
+        Duration duration = Duration.ofMinutes(scanner.nextInt());
+        if (taskManager.checkTimeTaskAvailable(startTime, duration)) {
+            taskManager.addSubtask(title, description, TaskStatus.NEW, epicId, duration, startTime);
+        } else {
+            System.out.println("Не может быть пересекающихся по времени задач");
+        }
     }
 
     private static void listAllTasks() {
@@ -218,6 +243,14 @@ public class Main {
     private static void getHistory() {
         System.out.println("Задачи:");
         List<Task> tasks =  taskManager.getHistory();
+        for (Task task : tasks) {
+            System.out.println(task);
+        }
+    }
+
+    private static void getPrioritizedTasks() {
+        System.out.println("Задачи:");
+        Set<Task> tasks = taskManager.getPrioritizedTasks();
         for (Task task : tasks) {
             System.out.println(task);
         }
