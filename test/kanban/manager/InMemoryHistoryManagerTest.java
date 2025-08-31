@@ -3,6 +3,9 @@ package kanban.manager;
 import kanban.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,11 +21,11 @@ class InMemoryHistoryManagerTest {
     @BeforeEach
     void beforeEach() {
         historyManager = new InMemoryHistoryManager();
-        testTask1 = new Task("Task 1", "Description", 1, TaskStatus.NEW);
-        testTask2 = new Task("Task 2", "Description", 2, TaskStatus.IN_PROGRESS);
-        testTask3 = new Task("Task 3", "Description", 3, TaskStatus.IN_PROGRESS);
-        testEpic = new Epic("Epic", "Description", 3);
-        testSubtask = new Subtask("Subtask", "Description", 4, TaskStatus.NEW, 3);
+        testTask1 = new Task("Task 1", "Description", 1, TaskStatus.NEW, Duration.ofMinutes(0), LocalDateTime.of(2000, 1, 1, 0, 0, 0, 0));
+        testTask2 = new Task("Task 2", "Description", 2, TaskStatus.IN_PROGRESS, Duration.ofMinutes(0), LocalDateTime.of(2000, 1, 1, 0, 0, 0, 0));
+        testTask3 = new Task("Task 3", "Description", 3, TaskStatus.IN_PROGRESS, Duration.ofMinutes(0), LocalDateTime.of(2000, 1, 1, 0, 0, 0, 0));
+        testEpic = new Epic("Epic", "Description", 3, Duration.ofMinutes(0), LocalDateTime.of(2000, 1, 1, 0, 0, 0, 0));
+        testSubtask = new Subtask("Subtask", "Description", 4, TaskStatus.NEW, 3, Duration.ofMinutes(0), LocalDateTime.of(2000, 1, 1, 0, 0, 0, 0));
     }
 
     @Test

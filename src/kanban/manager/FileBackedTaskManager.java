@@ -4,6 +4,9 @@ import kanban.exception.ManagerSaveException;
 import kanban.model.*;
 
 import java.io.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,8 +26,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public Task addTask(String title, String description, TaskStatus status) {
-        Task task = super.addTask(title, description, status);
+    public Task addTask(String title, String description, TaskStatus status, Duration duration, LocalDateTime startTime) {
+        Task task = super.addTask(title, description, status, duration, startTime);
         try {
             save(task);
         } catch (ManagerSaveException exception) {
@@ -48,8 +51,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public Subtask addSubtask(String title, String description, TaskStatus status, int epicId) {
-        Subtask task = super.addSubtask(title,description,status,epicId);
+    public Subtask addSubtask(String title, String description, TaskStatus status, int epicId, Duration duration, LocalDateTime startTime) {
+        Subtask task = super.addSubtask(title,description,status,epicId, duration, startTime);
         try {
             save(task);
         } catch (ManagerSaveException exception) {
@@ -101,19 +104,24 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private static Task fromString(String value) {
-        String[] taskValues = value.split("\\,");
+        String[] taskValues = value.split(",");
         TaskType type = TaskType.valueOf(taskValues[1]);
         int id = Integer.parseInt(taskValues[0]);
         String title = taskValues[2];
         TaskStatus status = TaskStatus.valueOf(taskValues[3]);
         String description = taskValues[4];
+        Duration duration = Duration.ofMinutes(Integer.parseInt(taskValues[5]));
+        LocalDateTime startTime = null;
+        if (taskValues.length == 7) {
+            startTime = LocalDateTime.parse(taskValues[6], DateTimeFormatter.ISO_DATE_TIME);
+        }
         if (type == TaskType.TASK) {
-            return new Task(title, description, id, status);
+            return new Task(title, description, id, status, duration, startTime);
         } else if (type == TaskType.EPIC) {
-            return new Epic(title, description, id);
+            return new Epic(title, description, id, duration, startTime);
         } else if (type == TaskType.SUBTASK) {
             int epicId = Integer.parseInt(taskValues[5]);
-            return new Subtask(title, description,id, status, epicId);
+            return new Subtask(title, description,id, status, epicId, duration, startTime);
         }
 
         return null;

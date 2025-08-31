@@ -1,26 +1,42 @@
 package kanban.model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Epic extends Task {
-    private final List<Integer> subtaskIds;
+    private final List<Integer> subtasksIds;
 
-    public Epic(String title, String description, int id) {
-        super(title, description, id, TaskStatus.NEW);
+    private LocalDateTime endDate;
+
+    public Epic(String title, String description, int id, Duration duration, LocalDateTime startTime) {
+        super(title, description, id, TaskStatus.NEW, duration, startTime);
         this.type = TaskType.EPIC;
-        this.subtaskIds = new ArrayList<>();
+        this.subtasksIds = new ArrayList<>();
     }
 
     public List<Integer> getSubtaskIds() {
-        return subtaskIds;
+        return subtasksIds;
     }
 
-    public void addSubtask(int subtaskId) {
-        subtaskIds.add(subtaskId);
+    public void addSubtask(Integer subtaskId) {
+        subtasksIds.add(subtaskId);
+    }
+
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
     }
 
     public void removeSubtask(int subtaskId) {
-        subtaskIds.remove(Integer.valueOf(subtaskId));
+        subtasksIds.remove(subtasksIds.stream()
+                .filter(id ->  id == subtaskId)
+                .findFirst()
+                .orElseThrow(() -> new Error("Не нашлась подзадача")));
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return endDate;
     }
 }
