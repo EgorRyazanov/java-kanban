@@ -123,7 +123,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertNotNull(epic, "Эпик должен существовать после создания");
         assertEquals("Epic 1", epic.getTitle());
         assertEquals(TaskStatus.NEW, epic.getStatus());
-        assertTrue(epic.getSubtasks().isEmpty(), "Список подзадач должен быть пустым");
+        assertTrue(epic.getSubtaskIds().isEmpty(), "Список подзадач должен быть пустым");
     }
 
     @Test
@@ -246,7 +246,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         Subtask subtask = manager.getSubtask(2);
 
         assertEquals(1, subtask.getEpicId(), "Подзадача должна быть привязана к эпику");
-        assertTrue(manager.getEpic(1).getSubtasks().contains(subtask),
+        assertTrue(manager.getEpic(1).getSubtaskIds().contains(subtask.getId()),
                 "Эпик должен содержать подзадачу");
     }
 
@@ -272,7 +272,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         manager.removeSubtask(2);
 
         assertNull(manager.getSubtask(2));
-        assertNotEquals(2, manager.getEpic(1).getSubtasks().get(0).getId());
+        assertNotEquals(2, manager.getEpic(1).getSubtaskIds().get(0));
     }
 
     @Test
@@ -368,4 +368,43 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertTrue(result);
     }
 
+    @Test
+    void getEndTimeShouldUpdateWhenSubtasksAreModified() {
+        LocalDateTime baseTime = LocalDateTime.of(2023, 12, 25, 10, 0);
+        manager.addEpic("Test Epic", "Description");
+        manager.addSubtask("Original", "Desc", TaskStatus.NEW, 1, Duration.ofHours(1), baseTime.plusHours(1));
+
+        Epic epic = manager.getEpic(1);
+        LocalDateTime initialEndTime = epic.getEndTime();
+
+        manager.addSubtask("To remove", "Desc", TaskStatus.NEW, 1, Duration.ofHours(3), baseTime.plusHours(2));
+        LocalDateTime updatedEndTime = epic.getEndTime();
+
+        assertNotEquals(initialEndTime, updatedEndTime);
+        assertTrue(updatedEndTime.isAfter(initialEndTime));
+    }
+
+    @Test
+    void getEndTimeShouldReturnSubtaskEndTimeWhenSingleSubtask() {
+        LocalDateTime baseTime = LocalDateTime.of(2023, 12, 25, 10, 0);
+        manager.addEpic("Test Epic", "Description");
+        manager.addSubtask("Original", "Desc", TaskStatus.NEW, 1, Duration.ofHours(1), baseTime.plusHours(1));
+        Epic epic = manager.getEpic(1);
+
+        LocalDateTime expectedEndTime = baseTime.plusHours(1).plusHours(1);
+        assertEquals(expectedEndTime, epic.getEndTime());
+    }
+
+    @Test
+    void getEndTimeShouldReturnLatestEndTimeWhenMultipleSubtasks() {
+        LocalDateTime baseTime = LocalDateTime.of(2023, 12, 25, 10, 0);
+        manager.addEpic("Test Epic", "Description");
+        manager.addSubtask("Original", "Desc", TaskStatus.NEW, 1, Duration.ofHours(1), baseTime.plusHours(1));
+        manager.addSubtask("To remove", "Desc", TaskStatus.NEW, 1, Duration.ofHours(3), baseTime.plusHours(2));
+
+        Epic epic = manager.getEpic(1);
+
+        LocalDateTime expectedEndTime = baseTime.plusHours(2).plusHours(3);
+        assertEquals(expectedEndTime, epic.getEndTime());
+    }
 }

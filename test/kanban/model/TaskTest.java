@@ -60,9 +60,7 @@ class TaskTest {
     void testHashCode() {
         Task task1 = new Task("Task", "Desc", 1, TaskStatus.NEW, Duration.ofMinutes(0), LocalDateTime.of(2000, 1, 1, 0, 0, 0, 0));
         Task task2 = new Task("Task", "Desc", 1, TaskStatus.DONE, Duration.ofMinutes(0), LocalDateTime.of(2000, 1, 1, 0, 0, 0, 0));
-        Task task3 = new Task("Different", "Desc", 1, TaskStatus.NEW, Duration.ofMinutes(0), LocalDateTime.of(2000, 1, 1, 0, 0, 0, 0));
 
         assertEquals(task1.hashCode(), task2.hashCode());
-        assertNotEquals(task1.hashCode(), task3.hashCode());
     }
 }

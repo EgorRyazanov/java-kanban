@@ -72,7 +72,7 @@ public class Task {
 
     @Override
     public int hashCode() {
-        return 17 + Objects.hashCode(id) + title.hashCode();
+        return 17 + Objects.hashCode(id);
     }
 
     public static final Comparator<Task> START_TIME_COMPARATOR = Comparator.comparing(Task::getStartTime);
