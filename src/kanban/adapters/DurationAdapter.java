@@ -9,8 +9,8 @@ import java.time.Duration;
 
 public class DurationAdapter extends TypeAdapter<Duration> {
     @Override
-    public void write(JsonWriter JsonWriter, Duration value) throws IOException {
-        JsonWriter.value(value.toMinutes());
+    public void write(JsonWriter jsonWriter, Duration value) throws IOException {
+        jsonWriter.value(value.toMinutes());
     }
 
     @Override
