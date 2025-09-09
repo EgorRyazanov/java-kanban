@@ -27,7 +27,7 @@ class EpicTest {
         assertEquals("Epic description", epic.getDescription());
         assertEquals(epicId, epic.getId());
         assertEquals(TaskStatus.NEW, epic.getStatus());
-        assertTrue(epic.getSubtaskIds().isEmpty());
+        assertTrue(epic.getSubtasksIds().isEmpty());
     }
 
     @Test
@@ -35,9 +35,9 @@ class EpicTest {
         epic.addSubtask(subtask1);
         epic.addSubtask(subtask2);
 
-        assertEquals(2, epic.getSubtaskIds().size());
-        assertTrue(epic.getSubtaskIds().contains(subtask1));
-        assertTrue(epic.getSubtaskIds().contains(subtask2));
+        assertEquals(2, epic.getSubtasksIds().size());
+        assertTrue(epic.getSubtasksIds().contains(subtask1));
+        assertTrue(epic.getSubtasksIds().contains(subtask2));
     }
 
     @Test
@@ -47,9 +47,9 @@ class EpicTest {
 
         epic.removeSubtask(2);
 
-        assertEquals(1, epic.getSubtaskIds().size());
-        assertNotEquals(2, epic.getSubtaskIds().size());
-        assertTrue(epic.getSubtaskIds().contains(subtask1));
+        assertEquals(1, epic.getSubtasksIds().size());
+        assertNotEquals(2, epic.getSubtasksIds().size());
+        assertTrue(epic.getSubtasksIds().contains(subtask1));
     }
 
     @Test
@@ -61,11 +61,11 @@ class EpicTest {
         result.add(subtask1);
         result.add(subtask2);
 
-        assertArrayEquals(result.toArray(), epic.getSubtaskIds().toArray());
+        assertArrayEquals(result.toArray(), epic.getSubtasksIds().toArray());
     }
 
     @Test
     void getEndTimeShouldReturnNullWhenNoSubtasks() {
-        assertNull(epic.getEndTime());
+        assertNull(epic.getEndDate());
     }
 }

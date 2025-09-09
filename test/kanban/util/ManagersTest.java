@@ -13,8 +13,7 @@ class ManagersTest {
         TaskManager taskManager = Managers.getDefault();
 
         assertNotNull(taskManager, "Должен возвращаться экземпляр TaskManager");
-        assertTrue(taskManager instanceof InMemoryTaskManager,
-                "Должна возвращаться реализация InMemoryTaskManager");
+        assertInstanceOf(InMemoryTaskManager.class, taskManager, "Должна возвращаться реализация InMemoryTaskManager");
     }
 
     @Test

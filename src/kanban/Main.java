@@ -1,3 +1,6 @@
+package kanban;
+
+import kanban.exception.NotFoundException;
 import kanban.manager.TaskManager;
 import kanban.model.Epic;
 import kanban.model.Subtask;
@@ -17,7 +20,7 @@ public class Main {
     private static final Scanner scanner = new Scanner(System.in);
     private static final TaskManager taskManager = Managers.getFileBackedTaskManager(new File("src/tasks.csv"));
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NotFoundException {
         while (true) {
             printMenu();
             String input = scanner.next();
@@ -113,21 +116,21 @@ public class Main {
         }
     }
 
-    private static void getTask() {
+    private static void getTask() throws NotFoundException {
         System.out.println("Введите ID задачи: ");
         int id = scanner.nextInt();
         Task task = taskManager.getTask(id);
         System.out.println(task);
     }
 
-    private static void getEpic() {
+    private static void getEpic() throws NotFoundException {
         System.out.println("Введите ID эпика: ");
         int id = scanner.nextInt();
         Epic epic = taskManager.getEpic(id);
         System.out.println(epic);
     }
 
-    private static void getSubTask() {
+    private static void getSubTask() throws NotFoundException {
         System.out.println("Введите ID подзадачи: ");
         int id = scanner.nextInt();
         Subtask subtask = taskManager.getSubtask(id);
@@ -142,7 +145,7 @@ public class Main {
         taskManager.addEpic(title, description);
     }
 
-    private static void createSubtask() {
+    private static void createSubtask() throws NotFoundException {
         System.out.println("Введите ID эпика, к которому относится подзадача: ");
         int epicId = scanner.nextInt();
         Epic epic = taskManager.getEpic(epicId);
@@ -186,7 +189,7 @@ public class Main {
         }
     }
 
-    private static void listSubtasksByEpic() {
+    private static void listSubtasksByEpic() throws NotFoundException {
         System.out.println("Введите ID эпика: ");
         int epicId = scanner.nextInt();
         List<Subtask> subtasks = taskManager.getSubtasksByEpic(epicId);
@@ -222,7 +225,7 @@ public class Main {
         }
     }
 
-    private static void removeTaskById() {
+    private static void removeTaskById() throws NotFoundException {
         System.out.println("Введите ID: ");
         int id = scanner.nextInt();
 

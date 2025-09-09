@@ -1,5 +1,6 @@
 package kanban.manager;
 
+import kanban.exception.NotFoundException;
 import kanban.model.*;
 
 import java.time.Duration;
@@ -7,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
-    private int idCounter = 1;
+    protected int idCounter = 1;
     protected final Map<Integer, Task> tasks = new HashMap<>();
     protected final Map<Integer, Epic> epics = new HashMap<>();
     protected final Map<Integer, Subtask> subtasks = new HashMap<>();
@@ -35,20 +36,24 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task getTask(int id) {
+    public Task getTask(int id) throws NotFoundException {
         Task task = tasks.get(id);
-        if (task != null) {
-            historyManager.add(task);
+
+        if (task == null) {
+            throw new NotFoundException();
         }
+
+        historyManager.add(task);
         return task;
     }
 
     @Override
-    public Subtask getSubtask(int id) {
+    public Subtask getSubtask(int id) throws NotFoundException {
         Subtask subtask = subtasks.get(id);
-        if (subtask != null) {
-            historyManager.add(subtask);
+        if (subtask == null) {
+            throw new NotFoundException();
         }
+        historyManager.add(subtask);
         return subtask;
     }
 
@@ -73,7 +78,12 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void removeTask(int id) {
+    public void removeTask(int id) throws NotFoundException {
+        Task task = tasks.get(id);
+        if (task == null) {
+            throw new NotFoundException();
+        }
+
         prioritizedTasks.remove(tasks.get(id));
         tasks.remove(id);
         historyManager.remove(id);
@@ -88,7 +98,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteAllEpics() {
         for (Epic epic : epics.values()) {
             historyManager.remove(epic.getId());
-            for (Integer subtaskId : epic.getSubtaskIds()) {
+            for (Integer subtaskId : epic.getSubtasksIds()) {
                 subtasks.remove(subtaskId);
                 historyManager.remove(subtaskId);
             }
@@ -97,11 +107,13 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Epic getEpic(int id) {
+    public Epic getEpic(int id) throws NotFoundException {
         Epic epic = epics.get(id);
-        if (epic != null) {
-            historyManager.add(epic);
+
+        if (epic == null) {
+            throw new NotFoundException();
         }
+        historyManager.add(epic);
         return epic;
     }
 
@@ -118,13 +130,15 @@ public class InMemoryTaskManager implements TaskManager {
 
 
     @Override
-    public void removeEpic(int id) {
+    public void removeEpic(int id) throws NotFoundException {
         Epic epic = epics.get(id);
-        if (epic != null) {
-            for (Integer subtaskId : epic.getSubtaskIds()) {
-                subtasks.remove(subtaskId);
-                historyManager.remove(subtaskId);
-            }
+        if (epic == null) {
+            throw new NotFoundException();
+        }
+
+        for (Integer subtaskId : epic.getSubtasksIds()) {
+            subtasks.remove(subtaskId);
+            historyManager.remove(subtaskId);
         }
         epics.remove(id);
         historyManager.remove(id);
@@ -136,13 +150,15 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public List<Subtask> getSubtasksByEpic(int epicId) {
+    public List<Subtask> getSubtasksByEpic(int epicId) throws NotFoundException {
         Epic epic = epics.get(epicId);
         List<Subtask> result = new ArrayList<>();
-        if (epic != null) {
-            for (int id : epic.getSubtaskIds()) {
-                result.add(subtasks.get(id));
-            }
+        if (epic == null) {
+            throw new NotFoundException();
+        }
+
+        for (int id : epic.getSubtasksIds()) {
+            result.add(subtasks.get(id));
         }
         return result;
     }
@@ -177,14 +193,16 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void removeSubtask(int id) {
+    public void removeSubtask(int id) throws NotFoundException {
         Subtask subtask = subtasks.get(id);
-        if (subtask != null) {
-            Epic epic = epics.get(subtask.getEpicId());
-            if (epic != null) {
-                epic.removeSubtask(id);
-                updateEpic(epic);
-            }
+        if (subtask == null) {
+            throw new NotFoundException();
+        }
+
+        Epic epic = epics.get(subtask.getEpicId());
+        if (epic != null) {
+            epic.removeSubtask(id);
+            updateEpic(epic);
         }
         subtasks.remove(id);
         historyManager.remove(id);
@@ -209,7 +227,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     private void updateEpicStatus(Epic epic) {
-        List<Integer> subtaskIds = epic.getSubtaskIds();
+        List<Integer> subtaskIds = epic.getSubtasksIds();
         if (subtaskIds.isEmpty()) {
             epic.setStatus(TaskStatus.NEW);
             return;
@@ -254,7 +272,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     private void updateEpicTime(Epic epic) {
-        List<Integer> subtaskIds = epic.getSubtaskIds();
+        List<Integer> subtaskIds = epic.getSubtasksIds();
         if (subtaskIds.isEmpty()) {
             epic.setEndDate(null);
             return;
