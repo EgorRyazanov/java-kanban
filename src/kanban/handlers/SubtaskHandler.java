@@ -103,5 +103,5 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
         sendCreated(exchange);
     }
 
-    enum Endpoint {GET_SUBTASKS, GET_SUBTASK_BY_ID, POST_SUBTASK, DELETE_SUBTASK, UNKNOWN}
+    enum Endpoint { GET_SUBTASKS, GET_SUBTASK_BY_ID, POST_SUBTASK, DELETE_SUBTASK, UNKNOWN }
 }

@@ -103,5 +103,5 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
         sendCreated(exchange);
     }
 
-    enum Endpoint {GET_TASKS, GET_TASK_BY_ID, POST_TASK, DELETE_TASK, UNKNOWN}
+    enum Endpoint { GET_TASKS, GET_TASK_BY_ID, POST_TASK, DELETE_TASK, UNKNOWN }
 }
