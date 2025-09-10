@@ -54,7 +54,7 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
     void shouldSaveAndLoadTaskFieldsCorrectly() throws IOException {
         Task original = manager.addTask("Test Task", "Test Desc", TaskStatus.DONE, Duration.ofMinutes(15), LocalDateTime.of(2000, 2, 3, 0, 0, 0, 0));
         List<Task> loadedTasks = FileBackedTaskManager.loadFromFile(tempFile);
-        Task loaded = loadedTasks.get(0);
+        Task loaded = loadedTasks.getFirst();
 
         assertEquals(original.getId(), loaded.getId(), "ID не совпадает");
         assertEquals(original.getTitle(), loaded.getTitle(), "Название не совпадает");
@@ -67,7 +67,7 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
     void shouldSaveAndLoadEpicWithoutSubtasks() throws IOException {
         Epic epic = manager.addEpic("Epic", "Epic desc");
         List<Task> loadedTasks = FileBackedTaskManager.loadFromFile(tempFile);
-        Epic loadedEpic = (Epic) loadedTasks.get(0);
+        Epic loadedEpic = (Epic) loadedTasks.getFirst();
 
         assertEquals(epic.getId(), loadedEpic.getId());
         assertEquals(TaskStatus.NEW, loadedEpic.getStatus(), "Статус эпика без подзадач должен быть NEW");

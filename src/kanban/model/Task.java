@@ -25,7 +25,7 @@ public class Task {
         this.startTime = startTime;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -45,12 +45,16 @@ public class Task {
         return description;
     }
 
-    public TaskType getType() {
-        return type;
+    public Duration getDuration() {
+        return duration;
     }
 
     public LocalDateTime getStartTime() {
         return startTime;
+    }
+
+    public TaskType getType() {
+        return type;
     }
 
     public LocalDateTime getEndTime() {

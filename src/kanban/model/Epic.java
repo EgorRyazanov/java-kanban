@@ -8,7 +8,7 @@ import java.util.List;
 public class Epic extends Task {
     private final List<Integer> subtasksIds;
 
-    private LocalDateTime endDate;
+    protected LocalDateTime endDate;
 
     public Epic(String title, String description, int id, Duration duration, LocalDateTime startTime) {
         super(title, description, id, TaskStatus.NEW, duration, startTime);
@@ -16,7 +16,7 @@ public class Epic extends Task {
         this.subtasksIds = new ArrayList<>();
     }
 
-    public List<Integer> getSubtaskIds() {
+    public List<Integer> getSubtasksIds() {
         return subtasksIds;
     }
 
@@ -35,8 +35,7 @@ public class Epic extends Task {
                 .orElseThrow(() -> new Error("Не нашлась подзадача")));
     }
 
-    @Override
-    public LocalDateTime getEndTime() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 }

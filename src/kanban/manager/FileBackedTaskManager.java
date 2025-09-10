@@ -82,6 +82,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         super(historyManager);
         this.file = file;
 
+        if (!initialValues.isEmpty()) {
+            idCounter = initialValues.size() + 1;
+        }
+
         for (Task task : initialValues) {
             if (task.getType().equals(TaskType.TASK)) {
                 tasks.put(task.getId(), task);
